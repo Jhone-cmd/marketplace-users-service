@@ -1,0 +1,21 @@
+services:
+  postgres:
+    container_name: users-db
+    image: bitnami/postgresql:latest
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: users_db
+    volumes:
+      - users_db_data:/bitnami/postgresql
+    networks:
+      - users-network
+
+volumes:
+  users_db_data:
+
+networks:
+  users-network:
+    driver: bridge
