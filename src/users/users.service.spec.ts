@@ -1,14 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { UsersService } from './users.service';
-import { User } from './entities/user.entity';
-import { UserRole } from './enums/user-role.enum';
-import { UserStatus } from './enums/user-status.enum';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { User } from './entities/user.entity.js';
+import { UserRole } from './enums/user-role.enum.js';
+import { UserStatus } from './enums/user-status.enum.js';
+import { UsersService } from './users.service.js';
+
 
 describe('UsersService', () => {
   let usersService: UsersService;
-  let usersRepository: jest.Mocked<Partial<Repository<User>>>;
+  let usersRepository: {
+    findOne: ReturnType<typeof vi.fn>;
+    find: ReturnType<typeof vi.fn>;
+    create: ReturnType<typeof vi.fn>;
+    save: ReturnType<typeof vi.fn>;
+    createQueryBuilder: ReturnType<typeof vi.fn>;
+  };
 
   const mockUser: User = {
     id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
@@ -36,11 +43,11 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     usersRepository = {
-      findOne: jest.fn(),
-      find: jest.fn(),
-      create: jest.fn(),
-      save: jest.fn(),
-      createQueryBuilder: jest.fn(),
+      findOne: vi.fn(),
+      find: vi.fn(),
+      create: vi.fn(),
+      save: vi.fn(),
+      createQueryBuilder: vi.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({

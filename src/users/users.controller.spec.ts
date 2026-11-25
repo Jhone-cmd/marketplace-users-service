@@ -1,14 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { UserRole } from './enums/user-role.enum';
-import { UserStatus } from './enums/user-status.enum';
-import { User } from './entities/user.entity';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { User } from './entities/user.entity.js';
+import { UserRole } from './enums/user-role.enum.js';
+import { UserStatus } from './enums/user-status.enum.js';
+import { UsersController } from './users.controller.js';
+import { UsersService } from './users.service.js';
+
 
 describe('UsersController', () => {
   let usersController: UsersController;
-  let usersService: jest.Mocked<Partial<UsersService>>;
+  let usersService: {
+    findById: ReturnType<typeof vi.fn>;
+    findActiveSellers: ReturnType<typeof vi.fn>;
+  };
 
   const mockUser: User = {
     id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
@@ -48,8 +53,8 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     usersService = {
-      findById: jest.fn(),
-      findActiveSellers: jest.fn(),
+      findById: vi.fn(),
+      findActiveSellers: vi.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
