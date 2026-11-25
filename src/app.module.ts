@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getDatabaseConfig } from './config/database.config.js';
 import { UsersModule } from './users/users.module.js';
+import { AuthModule } from './auth/auth.module.js';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -15,7 +16,8 @@ import { UsersModule } from './users/users.module.js';
     inject: [ConfigService],
     useFactory: (configService: ConfigService) => getDatabaseConfig(configService),
   }),
-    UsersModule,],
+    UsersModule,
+    AuthModule,],
   controllers: [AppController],
   providers: [AppService],
 })
